@@ -23,9 +23,9 @@ namespace CarTrab.Services
             try
             {
                 var marca = _marcaService.GetById(newModelo.id_marca);
-                if(marca == null)
+                if (marca == null)
                 {
-                    throw new Exception("Marca não localizada");
+                    return false;
                 }
                 Modelo modelo = newModelo;
                 modelo.id = ObjectId.GenerateNewId().ToString();
@@ -56,10 +56,6 @@ namespace CarTrab.Services
             try
             {
                 Modelo modelo = await _modeloCollection.Find(c => c.id == id).FirstOrDefaultAsync();
-                if (modelo == null)
-                {
-                    throw new Exception("O modelo não foi localizada.");
-                }
                 return modelo;
             }
             catch (Exception ex)
@@ -75,7 +71,7 @@ namespace CarTrab.Services
                 Modelo modelo = await _modeloCollection.Find(x => x.id == id).FirstOrDefaultAsync();
                 if (modelo == null)
                 {
-                    throw new Exception("Modelo não localizado.");
+                    return false;
                 }
                 await _modeloCollection.DeleteOneAsync(x => x.id == id);
                 return true; ;
@@ -93,12 +89,12 @@ namespace CarTrab.Services
                 var marca = _marcaService.GetById(newModelo.id_marca);
                 if (marca == null)
                 {
-                    throw new Exception("Marca não localizada");
+                    return false;
                 }
                 Modelo modelo = await _modeloCollection.Find(x => x.id == newModelo.id).FirstOrDefaultAsync();
                 if (modelo == null)
                 {
-                    throw new Exception("Modelo não localizado.");
+                    return false;
                 }
                 await _modeloCollection.ReplaceOneAsync(x => x.id == modelo.id, newModelo);
                 return true;

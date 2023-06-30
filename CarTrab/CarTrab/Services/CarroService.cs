@@ -25,7 +25,7 @@ namespace CarTrab.Services
                 var modelo = _modeloService.GetById(newCarro.id_modelo);
                 if (modelo == null)
                 {
-                    throw new Exception("Modelo não localizada");
+                    return false;
                 }
                 Carro carro = newCarro;
                 carro.id = ObjectId.GenerateNewId().ToString();
@@ -51,15 +51,11 @@ namespace CarTrab.Services
             }
         }
 
-        public async Task<Carro> GetById(string id)
+        public async Task<Carro?> GetById(string id)
         {
             try
             {
                 Carro carro = await _carroCollection.Find(c => c.id == id).FirstOrDefaultAsync();
-                if (carro == null)
-                {
-                    throw new Exception("O Carro não foi localizada.");
-                }
                 return carro;
             }
             catch (Exception ex)
@@ -75,7 +71,7 @@ namespace CarTrab.Services
                 Carro carro = await _carroCollection.Find(x => x.id == id).FirstOrDefaultAsync();
                 if (carro == null)
                 {
-                    throw new Exception("Carro não localizado.");
+                    return false;
                 }
                 await _carroCollection.DeleteOneAsync(x => x.id == id);
                 return true; ;
@@ -93,12 +89,12 @@ namespace CarTrab.Services
                 var modelo = _modeloService.GetById(newCarro.id_modelo);
                 if (modelo == null)
                 {
-                    throw new Exception("modelo não localizada");
+                    return false;
                 }
                 Carro carro = await _carroCollection.Find(x => x.id == newCarro.id).FirstOrDefaultAsync();
                 if (carro == null)
                 {
-                    throw new Exception("Carro não localizado.");
+                    return false;
                 }
                 await _carroCollection.ReplaceOneAsync(x => x.id == carro.id, newCarro);
                 return true;

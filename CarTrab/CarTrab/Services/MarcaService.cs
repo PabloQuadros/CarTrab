@@ -1,6 +1,5 @@
 ﻿using CarTrab.DataBase.Mongo;
 using CarTrab.Entities;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -45,15 +44,11 @@ namespace CarTrab.Services
             }
         }
 
-        public async Task<Marca> GetById(string id)
+        public async Task<Marca?> GetById(string id)
         {
             try
             {
                 Marca marca = await _marcaCollection.Find(c => c.id == id).FirstOrDefaultAsync();
-                if (marca == null)
-                {
-                    throw new Exception("O Marca não foi localizada.");
-                }
                 return marca;
             }
             catch (Exception ex)
@@ -69,7 +64,7 @@ namespace CarTrab.Services
                 Marca marca = await _marcaCollection.Find(x => x.id == id).FirstOrDefaultAsync();
                 if (marca == null)
                 {
-                    throw new Exception("Marca não localizado.");
+                    return false;
                 }
                 await _marcaCollection.DeleteOneAsync(x => x.id == id);
                 return true; ;
@@ -87,7 +82,7 @@ namespace CarTrab.Services
                 Marca marca = await _marcaCollection.Find(x => x.id == newMarca.id).FirstOrDefaultAsync();
                 if (marca == null)
                 {
-                    throw new Exception("Marca não localizado.");
+                    return false;
                 }
                 await _marcaCollection.ReplaceOneAsync(x => x.id == marca.id, newMarca);
                 return true;
