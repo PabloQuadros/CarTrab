@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  carTrab_db:
+    image: mongo:latest
+
+#services:
+#  cartrab:
+#    image: ${DOCKER_REGISTRY-}cartrab
+#    build:
+#      context: .
+#      dockerfile: CarTrab/Dockerfile
+
+volumes:
+  mongo_data:
